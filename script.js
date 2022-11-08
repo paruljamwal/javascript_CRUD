@@ -17,7 +17,7 @@ function setLocalStorage(){
             Name:- <span> ${user.name} </span> 
             Password:- <span> ${user.password} </span> 
             <button onclick="onDelete(${id})" > Delete</button>
-            <button onclick="onEdit(${id}) id="btnEdit" >Edit</button>  
+            <button onclick="onEdit(${id})" id="btnEdit" >Edit</button>  
 
             `;
 
@@ -90,8 +90,39 @@ function onDelete(id){
 // edit data....
 
 function onEdit(id){
+
     let arr = JSON.parse(localStorage.getItem("userData"));
 
-    let name = document.querySelector("#name").name;
-    let password = document.querySelector("#password").name;
+    let name = document.querySelector("#name").value=arr[id].name;
+    let password = document.querySelector("#password").value= arr[id].password;
+
+      submitButton.setAttribute("disabled",true);
+
+      let editBtn = document.createElement("button");
+      let form = document.querySelector("#form");
+
+      let btnEdit = document.querySelectorAll("#btnEdit")
+   editBtn.innerHTML = "Edit";
+
+   btnEdit.forEach((el)=>{
+    el.setAttribute("disabled",true)
+   });
+
+   form.insertAdjacentElement("beforeend",editBtn);
+
+   editBtn.addEventListener("click",(e)=>{
+    e.preventDefault();
+    let newName = document.querySelector("#name");
+    let newpassword = document.querySelector("#password");
+
+    arr.splice(id,1,{name:newName.value,password:newpassword.value})
+    localStorage.setItem("userData",JSON.stringify(arr)); 
+    setLocalStorage();
+     
+     newName.value = "";
+     newpassword.value = "";
+     form.removeChild(form.lastElementChild);
+     submitButton.removeAttribute("disabled",true);
+
+})
 }
